@@ -1,7 +1,8 @@
 //Done: Scheduler aufnehmen: https://bukkit.gamepedia.com/Scheduler_Programming
-//Done: Broadcast einbauen für Countdown
+//Done: Broadcast einbauen fÃ¼r Countdown
 //Done: Scheduler umbauen auf LocalDateTime
-//Done: Scheduler umbauen für CountDown
+//Done: Scheduler umbauen fÃ¼r CountDown
+//TODO: Maybe append the comment to s_message
 
 package de.dorsax.ShountDown;
 
@@ -112,8 +113,8 @@ public class Scheduler extends BukkitRunnable {
     		s_message="Server shuts down.";
     	}
     	
-    	if (!b_silent) this.plugin.getServer().broadcastMessage("§4[Server]§r "+s_message); //broadcast only if not silent
-    	Bukkit.getConsoleSender().sendMessage("§4[ShountDown] §r"+s_message); //always also to console
+    	if (!b_silent) this.plugin.getServer().broadcastMessage("Â§4[Server]Â§r "+s_message); //broadcast only if not silent
+    	Bukkit.getConsoleSender().sendMessage("Â§4[ShountDown] Â§r"+s_message); //always also to console
     	
     	if (l_seconds <= 0) { //if action should start, trigger it here
         	this.sd.run();

@@ -1,7 +1,7 @@
 //Done: Shutdown einbauen
 //Done: kick einbauen bevor der Server heruntergefahren wird (?)
 //Done: konfigurierbare Kick-Nachricht
-//TO-DO: Add Reboot
+//TODO: Add Reboot
 
 
 package de.dorsax.ShountDown;
