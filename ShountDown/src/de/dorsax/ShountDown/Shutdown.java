@@ -30,11 +30,9 @@ public class Shutdown {
 	
 	public void run () {
 		List<Player> list = new ArrayList<>(Bukkit.getOnlinePlayers());
-        Iterator<Player> playerIterator = list.iterator();
 
-        while (playerIterator.hasNext()) {
-            Player toKick = playerIterator.next();
-            toKick.kickPlayer("Scheduled shutdown"+this.s_comment);
+        for (Player toKick : list) {
+            toKick.kickPlayer("Scheduled shutdown" + this.s_comment);
         }
         if (b_whitelist) {
         	Bukkit.setWhitelist(!Bukkit.hasWhitelist());

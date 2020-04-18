@@ -1,15 +1,19 @@
 //shutdown -abort -comment "why shutdown is initiated" -time <seconds or time in HH:MM, default 60s> --whitelist --silent  
-//TO-DO: Permission-Check https://bukkit.org/threads/how-to-check-permissions.90065/
+//Done: Permission-Check https://bukkit.org/threads/how-to-check-permissions.90065/
 //Done: validate arguments
-//TO-DO: Add short-commands -awst|c 
+//TODO: Add short-commands -awst|c
 //Done: Only one action at a time
 //Done: Actions can be cancelled
-//TO-DO: Add Reboot
+//TODO: Add Reboot
 
 package de.dorsax.ShountDown;
 
 import java.time.LocalDateTime;
+
+import com.sun.istack.internal.NotNull;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import java.util.logging.Level;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,16 +27,15 @@ public class Commands implements CommandExecutor{
 		this.plugin = plugin;
 	}
 	
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, String label, @NotNull String[] args) {
     	
     	if (label.contentEquals("shutdown")) {
-    		return this.cmdShutdown(sender, command, args);
-    	} else {
-    		return false;
+				return this.cmdShutdown(sender, command, args);
+
     	}
-    
+    	return false;
     }
-    
+
     private boolean cmdShutdown (CommandSender sender, Command command, String[] args) {
     	
     	String s_message="";
@@ -60,14 +63,14 @@ public class Commands implements CommandExecutor{
     				if (this.scheduler!=null) {
 	    				this.scheduler.cancel();
 	    				this.scheduler = null;
-	    				s_message = "§4[ShountDown] §rSchedule aborted";
+	    				s_message = "Â§4[ShountDown] Â§rSchedule aborted";
 	    		    	if (sender instanceof Player) {
 	    		    		sender.sendMessage(s_message+".");
 	    		    	}
-	    		    	Bukkit.getConsoleSender().sendMessage(s_message + " by Player "+sender.getName()+".");
+	    		    	Bukkit.getLogger().log(Level.INFO,s_message + " by Player "+sender.getName()+".");
 	    				return true;
     				} else {
-    					sender.sendMessage("§4[ShountDown] §rThere is no schedule to abort...");
+    					sender.sendMessage("Â§4[ShountDown] Â§rThere is no schedule to abort...");
         				return true;
     				}
     			case "-comment":
@@ -90,7 +93,7 @@ public class Commands implements CommandExecutor{
 							if (s_comment.isEmpty()) {
 								s_comment=args[j];
 							} else {
-								s_comment=s_comment + " " + args[j];
+								s_comment=s_comment.concat(args[j]);
 							}
 						}
 						s_comment=s_comment.substring(1, s_comment.length()-1); //clear comment from ""
@@ -161,19 +164,21 @@ public class Commands implements CommandExecutor{
     	//send fail/success-message to player and console
     	
     	if (this.scheduler != null) {
-    		s_message = "[ShountDown] §4A schedule is already running! Please abort the other before running this command again.";
+    		s_message = "[ShountDown] A schedule is already running! Please abort the other before running this command again.";
+			sender.sendMessage(s_message);
     	} else {
         	//create new scheduler and let it run
         	scheduler = new Scheduler (this.plugin,ldt_time,new Shutdown(b_whitelist,s_comment));
         	scheduler.setSilent(b_silent);
         	scheduler.runTaskTimer(this.plugin, 10, 10);
-    		s_message = "§4[ShountDown] §rScheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute());
+    		s_message = "Â§4[ShountDown] Â§rScheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute());
+			if (sender instanceof Player) sender.sendMessage(s_message);
+			Bukkit.getLogger().log(Level.WARNING,"[ShountDown] Scheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute()) + " by Player " + sender.getName());
     	}
 
-    	if (sender instanceof Player) {
-    		sender.sendMessage(s_message);
-    	}
-    	Bukkit.getConsoleSender().sendMessage(s_message);
+
+
+
     	return true;
     }
 

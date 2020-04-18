@@ -4,11 +4,11 @@
 //Done: Scheduler umbauen für CountDown
 //TODO: Maybe append the comment to s_message
 
+
 package de.dorsax.ShountDown;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -113,9 +113,11 @@ public class Scheduler extends BukkitRunnable {
     		s_message="Server shuts down.";
     	}
     	
-    	if (!b_silent) this.plugin.getServer().broadcastMessage("§4[Server]§r "+s_message); //broadcast only if not silent
-    	Bukkit.getConsoleSender().sendMessage("§4[ShountDown] §r"+s_message); //always also to console
-    	
+    	if (!b_silent) {
+			this.plugin.getServer().broadcastMessage("§4[Server]§r " + s_message); //broadcast only if not silent
+		} else {
+			Bukkit.getConsoleSender().sendMessage("§4[ShountDown] §r" + s_message); //console only if silent
+		}
     	if (l_seconds <= 0) { //if action should start, trigger it here
         	this.sd.run();
         	this.cancel();
