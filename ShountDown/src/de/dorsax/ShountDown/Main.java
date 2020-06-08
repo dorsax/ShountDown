@@ -9,7 +9,9 @@ public class Main extends JavaPlugin{
     @Override
     public void onEnable() {
         Bukkit.getLogger().log(Level.INFO,"[ShountDown] Plugin is active and waiting to run.");
-    	this.getCommand("shutdown").setExecutor(new Commands(this));
+
+        this.getCommand("shutdown").setExecutor(new CommandShutdown(this));
+        this.getCommand("reboot").setExecutor(new CommandReboot(this));
     }
     // Fired when plugin is disabled
     @Override

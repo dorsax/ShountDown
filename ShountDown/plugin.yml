@@ -1,18 +1,25 @@
 name: ShountDown
 main: de.dorsax.ShountDown.Main
-version: 0.7_beta
-api-version: 1.15
+version: "0.8"
+api-version: "1.15"
 author: dor_sax
 
-commands: 
+commands:
     shutdown:
         description: Shut down with a timer
         usage: /<command> -abort -comment "Comment here" -time <Minutes or HH:MM> --whitelist --silent
         permission: shountdown.shutdown
+    reboot:
+        description: Shut down with a timer
+        usage: /<command> -abort -comment "Comment here" -time <Minutes or HH:MM> --whitelist --silent
+        permission: shountdown.reboot
 permissions:
     shountdown.*:
         children:
             shountdown.shutdown: true
+            shountdown.reboot: true
         default: op
     shountdown.shutdown:
+        default: false
+    shountdown.reboot:
         default: false
