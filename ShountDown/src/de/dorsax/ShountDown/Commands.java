@@ -1,10 +1,9 @@
 //shutdown -abort -comment "why shutdown is initiated" -time <seconds or time in HH:MM, default 60s> --whitelist --silent  
 //Done: Permission-Check https://bukkit.org/threads/how-to-check-permissions.90065/
 //Done: validate arguments
-//TODO: Add short-commands -awst|c
 //Done: Only one action at a time
 //Done: Actions can be cancelled
-//TODO: Add Reboot
+//Done: Add Reboot
 
 package de.dorsax.ShountDown;
 
@@ -29,15 +28,17 @@ public class Commands implements CommandExecutor{
 	
     public boolean onCommand(@NotNull CommandSender sender, Command command, String label, @NotNull String[] args) {
     	
-    	if (label.contentEquals("shutdown")) {
-				return this.cmdShutdown(sender, command, args);
-
+    	if (label.contentEquals("shutdown") ) {
     	}
+    	if ( label.contentEquals("reboot")) {
+			return this.cmdShutdown(sender, command, label, args);
+		}
     	return false;
     }
 
-    private boolean cmdShutdown (CommandSender sender, Command command, String[] args) {
-    	
+    private boolean cmdShutdown (CommandSender sender, Command command, String label, String[] args) {
+
+
     	String s_message="";
 		boolean b_comment=false;
 		String s_comment="";
@@ -55,7 +56,7 @@ public class Commands implements CommandExecutor{
     			return false;
     		}
     		for (int i=0; i<args.length;i++ ) {
-    			
+
     			switch (args[i]) {
     			case "":
     				break;
@@ -88,7 +89,7 @@ public class Commands implements CommandExecutor{
 							break;
 						}
 					}
-					if (i_foundAt_0 != 0) { //if the last part is found, concat the strings between it 
+					if (i_foundAt_0 != 0) { //if the last part is found, concat the strings between it
 						for (int j = i+1; j<=i_foundAt_0;j++) {
 							if (s_comment.isEmpty()) {
 								s_comment=args[j];
@@ -102,16 +103,16 @@ public class Commands implements CommandExecutor{
 					}
 					i=i_foundAt_0; //index i jumps to end of comment, because it won't cover it anyway
 					break;
-    				
+
     			case "-time":
     				if (b_time || (args.length-1==i)) {  //when the flag is already set or no time followed afterwards
     					return false;
     				}
-    				//flag is set, time-String is set as the next one, index skippes next entry 
+    				//flag is set, time-String is set as the next one, index skippes next entry
 					b_time=true;
 					s_time=args[i+1];
 					i++;
-					
+
 					if (s_time.contains(":")) { //if time is stated as at HH:MM, no need for ""
 						String[] as_time = s_time.split(":");
 						if (as_time.length!=2) {
@@ -139,7 +140,7 @@ public class Commands implements CommandExecutor{
 						}
 					}
 					break;
-    				
+
     			case "--whitelist": //flags containing '--' can only stand aat the end of a command
     				if ((!b_whitelist & (i==args.length-1)) || (!b_whitelist & (i==args.length-2) & (args[i+1].contains("--silent"))  )) {
     					b_whitelist=true;
@@ -158,7 +159,7 @@ public class Commands implements CommandExecutor{
     				return false;
     			}
     		}
-    		
+
     	}
     	
     	//send fail/success-message to player and console
@@ -168,7 +169,18 @@ public class Commands implements CommandExecutor{
 			sender.sendMessage(s_message);
     	} else {
         	//create new scheduler and let it run
-        	scheduler = new Scheduler (this.plugin,ldt_time,new Shutdown(b_whitelist,s_comment));
+			int i_type = 0;
+			String s_shutdownMessage ="";
+			if (label == "reboot") {
+				i_type = 1;
+				s_shutdownMessage = "Server reboots";
+			} else {
+				i_type = 0;
+				s_shutdownMessage = "Server shuts down";
+			}
+			Bukkit.getConsoleSender().sendMessage("§4[ShountDown] §r" + label);
+			Shutdown sd = new Shutdown(b_whitelist,s_comment,i_type);
+        	scheduler = new Scheduler (this.plugin,ldt_time, s_shutdownMessage, sd);
         	scheduler.setSilent(b_silent);
         	scheduler.runTaskTimer(this.plugin, 10, 10);
     		s_message = "§4[ShountDown] §rScheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute());
