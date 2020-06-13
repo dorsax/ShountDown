@@ -49,6 +49,7 @@ public class CommandHandler {
                 switch (args[i]) {
                     case "":
                         break;
+                    case "-a":
                     case "-abort":
                         if (args.length-1 == i) {
                             b_abort = true;
@@ -57,6 +58,7 @@ public class CommandHandler {
                             b_okay = false;
                         }
                         break outer;
+                    case "-c":
                     case "-comment":
                         if (b_comment || (args.length-1==i)) { //when the flag is already set or no comment followed afterwards
                             b_okay = false;
@@ -86,7 +88,7 @@ public class CommandHandler {
                         }
                         i=i_foundAt_0; //index i jumps to end of comment, because it won't cover it anyway
                         break;
-
+                    case "-t":
                     case "-time":
                         if (b_time || (args.length-1==i)) {  //when the flag is already set or no time followed afterwards
                             b_okay = false;
@@ -123,16 +125,17 @@ public class CommandHandler {
                             }
                         }
                         break;
-
-                    case "--whitelist": //flags containing '--' can only stand aat the end of a command
-                        if ((!b_whitelist & (i==args.length-1)) || (!b_whitelist & (i==args.length-2) & (args[i+1].contains("--silent"))  )) {
+                    case "-w":
+                    case "--whitelist":
+                        if (!b_whitelist) {
                             b_whitelist=true;
                             break;
                         } else {
                             b_okay = false;
                         }
-                    case "--silent": //flags containing '--' can only stand aat the end of a command
-                        if ((!b_silent & (i==args.length-1)) || (!b_silent & (i==args.length-2) & (args[i+1].contains("--whitelist"))  )) {
+                    case "-s":
+                    case "--silent":
+                        if (!b_silent) {
                             b_silent=true;
                             break;
                         } else {
@@ -150,8 +153,8 @@ public class CommandHandler {
 
         if (b_okay) {
             if (b_abort) { //if schedule has to be aborted
-                if (Bukkit.getScheduler().isQueued(this.i_schedulerId)) {
-                    Bukkit.getScheduler().cancelTask(this.i_schedulerId);
+                if (Bukkit.getScheduler().isQueued(i_schedulerId)) {
+                    Bukkit.getScheduler().cancelTask(i_schedulerId);
                     s_message = "§4[ShountDown] §rSchedule aborted";
                     //send a message to player and log
                     if (sender instanceof Player) {
@@ -164,7 +167,7 @@ public class CommandHandler {
                     return true;
                 }
             } else {
-                if (Bukkit.getScheduler().isQueued(this.i_schedulerId)) { //if scheduler is already running
+                if (Bukkit.getScheduler().isQueued(i_schedulerId)) { //if scheduler is already running
                     s_message = "[ShountDown] A schedule is already running! Please abort the other before running this command again.";
                     sender.sendMessage(s_message);
                     return true;
@@ -189,7 +192,7 @@ public class CommandHandler {
                     Scheduler scheduler = new Scheduler (this.plugin,ldt_time, s_shutdownMessage, sd);
                     scheduler.setSilent(b_silent);
                     scheduler.runTaskTimer(this.plugin, 10, 10);
-                    this.i_schedulerId = scheduler.getTaskId();
+                    i_schedulerId = scheduler.getTaskId();
                     s_message = "§4[ShountDown] §rScheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute());
                     if (sender instanceof Player) sender.sendMessage(s_message);
                     Bukkit.getLogger().log(Level.WARNING,s_message + " by Player " + sender.getName());
