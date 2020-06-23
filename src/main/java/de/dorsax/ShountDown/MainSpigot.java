@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 
-public class Main extends JavaPlugin{
+public class MainSpigot extends JavaPlugin{
 	// Fired when plugin is first enabled
     @Override
     public void onEnable() {

@@ -2,7 +2,7 @@
 
 package de.dorsax.ShountDown;
 
-import com.sun.istack.internal.NotNull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,7 +24,7 @@ public class CommandHandler {
         this.plugin = plugin;
     }
 
-    public boolean spigotSplitter(@NotNull CommandSender sender, Command command, String label, @NotNull String[] args) {
+    public boolean spigotSplitter( CommandSender sender, Command command, String label,  String[] args) {
 
         String s_message="";
         boolean b_abort = false; //if abort argument is set

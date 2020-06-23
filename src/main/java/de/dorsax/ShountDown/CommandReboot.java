@@ -1,6 +1,5 @@
 package de.dorsax.ShountDown;
 
-import com.sun.istack.internal.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +20,7 @@ public class CommandReboot implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    public boolean onCommand(@NotNull CommandSender sender, Command command, String label, @NotNull String[] args) {
+    public boolean onCommand( CommandSender sender, Command command, String label,  String[] args) {
 
         CommandHandler ch = new CommandHandler(this.plugin);
         return ch.spigotSplitter(sender,command,label,args);

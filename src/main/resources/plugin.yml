@@ -1,6 +1,6 @@
 name: ShountDown
-main: de.dorsax.ShountDown.Main
-version: "0.9"
+main: de.dorsax.ShountDown.MainSpigot
+version: "${project.version}"
 api-version: "1.15"
 author: dor_sax
 
@@ -10,7 +10,7 @@ commands:
         usage: /<command> -abort -comment "Comment here" -time <Minutes or HH:MM> --whitelist --silent
         permission: shountdown.shutdown
     reboot:
-        description: Reboot with a timer
+        description: Shut down with a timer
         usage: /<command> -abort -comment "Comment here" -time <Minutes or HH:MM> --whitelist --silent
         permission: shountdown.reboot
 permissions:
