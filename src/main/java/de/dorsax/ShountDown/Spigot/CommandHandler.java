@@ -1,6 +1,6 @@
 //TODO: Add short-commands -awst|c
 
-package de.dorsax.ShountDown;
+package de.dorsax.ShountDown.Spigot;
 
 
 import org.bukkit.Bukkit;
@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 public class CommandHandler {
@@ -157,9 +155,7 @@ public class CommandHandler {
                     Bukkit.getScheduler().cancelTask(i_schedulerId);
                     s_message = "§4[ShountDown] §rSchedule aborted";
                     //send a message to player and log
-                    if (sender instanceof Player) {
-                        sender.sendMessage(s_message+".");
-                    }
+                    Bukkit.broadcastMessage(s_message+".");
                     Bukkit.getLogger().log(Level.INFO,s_message + " by Player "+sender.getName()+".");
                     return true;
                 } else {
@@ -194,7 +190,7 @@ public class CommandHandler {
                     scheduler.runTaskTimer(this.plugin, 10, 10);
                     i_schedulerId = scheduler.getTaskId();
                     s_message = "§4[ShountDown] §rScheduled shutdown at " + String.format ("%02d", ldt_time.getHour()) + ":" + String.format ("%02d", ldt_time.getMinute());
-                    if (sender instanceof Player) sender.sendMessage(s_message);
+                    if (!b_silent) Bukkit.broadcastMessage(s_message);
                     Bukkit.getLogger().log(Level.WARNING,s_message + " by Player " + sender.getName());
 
                     return true;

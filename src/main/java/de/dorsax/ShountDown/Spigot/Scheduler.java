@@ -6,12 +6,12 @@
 //TODO: Maybe append the comment to s_message
 
 
-package de.dorsax.ShountDown;
+package de.dorsax.ShountDown.Spigot;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.logging.Level;
 
+import net.md_5.bungee.api.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,6 +41,7 @@ public class Scheduler extends BukkitRunnable {
     public void setSilent(boolean b_silent) {
     	this.b_silent=b_silent;
     }
+
 
     @Override
     public void run() {

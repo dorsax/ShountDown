@@ -1,4 +1,4 @@
-package de.dorsax.ShountDown;
+package de.dorsax.ShountDown.Spigot;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
