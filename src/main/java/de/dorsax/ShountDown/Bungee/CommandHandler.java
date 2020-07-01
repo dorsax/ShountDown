@@ -52,15 +52,18 @@ public class CommandHandler {
                             b_okay = true;
                         } else {
                             b_okay = false;
+                            break outer;
                         }
                         break outer;
                     case "-c":
                     case "-comment":
                         if (b_comment || (args.length-1==i)) { //when the flag is already set or no comment followed afterwards
                             b_okay = false;
+                            break outer;
                         }
                         if (!args[i+1].startsWith("\"")) { //when the next argument does not start with "
                             b_okay = false;
+                            break outer;
                         }
                         b_comment=true;
                         int i_foundAt_0 = 0; //local var, used to determine the last part of the comment in the args[]
@@ -81,6 +84,7 @@ public class CommandHandler {
                             s_comment=s_comment.substring(1, s_comment.length()-1); //clear comment from ""
                         } else {
                             b_okay = false;
+                            break outer;
                         }
                         i=i_foundAt_0; //index i jumps to end of comment, because it won't cover it anyway
                         break;
@@ -88,6 +92,7 @@ public class CommandHandler {
                     case "-time":
                         if (b_time || (args.length-1==i)) {  //when the flag is already set or no time followed afterwards
                             b_okay = false;
+                            break outer;
                         }
                         //flag is set, time-String is set as the next one, index skippes next entry
                         b_time=true;
@@ -98,6 +103,7 @@ public class CommandHandler {
                             String[] as_time = s_time.split(":");
                             if (as_time.length!=2) {
                                 b_okay = false;
+                                break outer;
                             }
                             try {
                                 LocalDateTime atm = LocalDateTime.now();
@@ -109,15 +115,18 @@ public class CommandHandler {
                                 }
                             } catch (NumberFormatException | java.time.DateTimeException e) {
                                 b_okay = false;
+                                break outer;
                             }
                         } else { //if time is stated as "in X minutes"
                             try {
                                 if (Integer.parseInt(s_time) > 1440 || Integer.parseInt(s_time) < 0) {
                                     b_okay = false;
+                                    return;
                                 }
                                 ldt_time= LocalDateTime.now().plusMinutes(Integer.parseInt(s_time));
                             } catch (NumberFormatException | java.time.DateTimeException e) {
                                 b_okay = false;
+                                break outer;
                             }
                         }
                         break;
@@ -135,7 +144,7 @@ public class CommandHandler {
                     case "--silent":
                         if (!b_silent) {
                             b_silent=true;
-                            break;
+                            break outer;
                         } else {
                             b_okay = false;
                         }
@@ -144,7 +153,7 @@ public class CommandHandler {
                 }
 
                 if (!b_okay) {
-                    break;
+                    break outer;
                 }
             }
         }
