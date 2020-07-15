@@ -12,6 +12,7 @@ public class MainSpigot extends JavaPlugin{
 
         this.getCommand("shutdown").setExecutor(new CommandShutdown(this));
         this.getCommand("reboot").setExecutor(new CommandReboot(this));
+        getServer().getPluginManager().registerEvents(new EventJoinListener(), this);
     }
     // Fired when plugin is disabled
     @Override
