@@ -6,7 +6,7 @@
 
     <groupId>de.dorsax</groupId>
     <artifactId>ShountDown</artifactId>
-    <version>0.10.0</version>
+    <version>0.10.1</version>
 
     <repositories>
         <!-- This adds the Bungeecord Maven repository to the build -->
