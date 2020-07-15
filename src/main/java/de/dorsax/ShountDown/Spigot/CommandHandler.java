@@ -160,7 +160,7 @@ public class CommandHandler {
 
         if (b_okay) {
             if (b_abort) { //if schedule has to be aborted
-                if (Bukkit.getScheduler().isQueued(i_schedulerId)) {
+                /*if (Bukkit.getScheduler().isQueued(i_schedulerId)) {
                     Bukkit.getScheduler().cancelTask(i_schedulerId);
                     s_message = "§4[ShountDown] §rSchedule aborted";
                     //send a message to player and log
@@ -170,10 +170,13 @@ public class CommandHandler {
                 } else {
                     sender.sendMessage("§4[ShountDown] §rThere is no schedule to abort...");
                     return true;
-                }
+                }*/
+                Scheduler.cancelAll();
+                return true;
             } else {
-                if (Bukkit.getScheduler().isQueued(i_schedulerId)) { //if scheduler is already running
-                    s_message = "[ShountDown] A schedule is already running! Please abort the other before running this command again.";
+                //if (Bukkit.getScheduler().isQueued(i_schedulerId)) { //if scheduler is already running
+                if (Scheduler.isRunning()) {
+                    s_message = "$4[ShountDown] $rA schedule is already running! Please abort the other before running this command again.";
                     sender.sendMessage(s_message);
                     return true;
                 } else {

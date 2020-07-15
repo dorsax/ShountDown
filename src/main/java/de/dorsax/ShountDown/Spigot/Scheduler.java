@@ -10,7 +10,9 @@ package de.dorsax.ShountDown.Spigot;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.logging.Level;
 
+import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +20,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Scheduler extends BukkitRunnable {
 
+	static private int i_schedulerID;
+	private static Scheduler runningScheduler;
     private final JavaPlugin plugin;
     private long l_hours, l_minutes,l_seconds;
     private boolean b_silent;
@@ -25,7 +29,11 @@ public class Scheduler extends BukkitRunnable {
     private LocalDateTime ldt_goaltime,ldt_last;
     private String s_message;
 
-    public Scheduler(JavaPlugin plugin, LocalDateTime goaltime, String s_message, Shutdown shutdown) {
+    static {
+    	i_schedulerID = 0;
+	}
+
+	public Scheduler(JavaPlugin plugin, LocalDateTime goaltime, String s_message, Shutdown shutdown) {
     	// Done: calculate timespan in minutes and hours to use later
 
 		this.s_message = s_message;
@@ -42,9 +50,89 @@ public class Scheduler extends BukkitRunnable {
     	this.b_silent=b_silent;
     }
 
+	public long getHours() { //returns how many hours are left
+		return this.l_hours;
+	}
+
+	public long getMinutes() { //returns how many minutes are left, as the part of the whole time
+		return this.l_minutes%60;
+	}
+
+	public LocalDateTime getGoaltime() { //returns the goaltime
+		return this.ldt_goaltime;
+	}
+
+	public String getMessage () {
+		return this.s_message;
+	}
+
+    public static boolean isRunning() {
+
+    	if (runningScheduler==null) {
+    		return false;
+		} else {
+    		return true;
+		}
+    	/*if (i_schedulerID == 0) {
+    		return false;
+		} else {
+    		return true;
+		}*/
+
+	}
+
+	public static  Scheduler getInstance() {
+    	return runningScheduler;
+	}
+
+	public static void cancelAll() {
+
+    	if (runningScheduler!=null) {
+    		runningScheduler.cancel();
+		}
+		/*if (i_schedulerID != 0) {
+			if (Bukkit.getScheduler().isQueued(i_schedulerID)) {
+				Bukkit.getScheduler().cancelTask(i_schedulerID);
+			} else {
+				i_schedulerID=0;
+			}
+		}*/
+	}
+
+	public void cancel() {
+		Bukkit.broadcastMessage("Cancel-Methode:"+i_schedulerID);
+		super.cancel(); //throws IllegalStateException
+		if (runningScheduler == this ) {
+    	//if (i_schedulerID == this.getTaskId()) {
+			String s_message = "§4[ShountDown] §rSchedule aborted.";
+			//send a message to player or log
+			if (!b_silent) {
+				Bukkit.broadcastMessage(s_message);
+			} else {
+				Bukkit.getLogger().log(Level.INFO,s_message);
+			}
+			runningScheduler=null;
+			//i_schedulerID=0;
+		} else {
+			throw new IllegalStateException();
+		}
+	}
 
     @Override
     public void run() {
+    	if (runningScheduler == null) {
+    		runningScheduler = this;
+		}
+    	if (this != runningScheduler) {
+    		this.cancel();
+		}
+    	/*
+    	if (i_schedulerID == 0) {
+			i_schedulerID = this.getTaskId();
+		} else if (i_schedulerID != this.getTaskId()) {
+    		this.cancel();
+    		throw new IllegalStateException(); //this should not happen!
+		}*/
     	// method checks, if the saved times differ from the newly fetched and the time has exceeded its lifespan.
     	// if thats the case it broadcasts a message to the server
     	// if the goaltime has been reached, the registered action is triggered and the scheduler canceled
