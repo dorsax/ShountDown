@@ -1,10 +1,10 @@
-package de.dorsax.ShountDown;
+package de.dorsax.ShountDown.Spigot;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 
-public class Main extends JavaPlugin{
+public class MainSpigot extends JavaPlugin{
 	// Fired when plugin is first enabled
     @Override
     public void onEnable() {
@@ -12,6 +12,7 @@ public class Main extends JavaPlugin{
 
         this.getCommand("shutdown").setExecutor(new CommandShutdown(this));
         this.getCommand("reboot").setExecutor(new CommandReboot(this));
+        getServer().getPluginManager().registerEvents(new EventJoinListener(), this);
     }
     // Fired when plugin is disabled
     @Override

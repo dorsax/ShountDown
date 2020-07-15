@@ -1,6 +1,6 @@
 name: ShountDown
-main: de.dorsax.ShountDown.Main
-version: "0.9"
+main: de.dorsax.ShountDown.Spigot.MainSpigot
+version: "${project.version}"
 api-version: "1.15"
 author: dor_sax
 

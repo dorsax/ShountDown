@@ -4,16 +4,13 @@
 //TODO: Add Reboot
 
 
-package de.dorsax.ShountDown;
+package de.dorsax.ShountDown.Spigot;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.Server.Spigot;
 import org.bukkit.entity.Player;
 
 public class Shutdown {

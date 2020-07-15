@@ -1,0 +1,4 @@
+name: ShountDown
+main: de.dorsax.ShountDown.Bungee.MainBungee
+version: ${project.version}
+author: dor_sax
