@@ -100,7 +100,7 @@ public class Scheduler extends BukkitRunnable {
 	}
 
 	public void cancel() {
-		Bukkit.broadcastMessage("Cancel-Methode:"+i_schedulerID);
+
 		super.cancel(); //throws IllegalStateException
 		if (runningScheduler == this ) {
     	//if (i_schedulerID == this.getTaskId()) {
