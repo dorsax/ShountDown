@@ -20,7 +20,7 @@ public class CommandShutdown extends Command {
     private ScheduledTask scheduledTask;
 
     public CommandShutdown(Plugin plugin) {
-        super("bshutdown");
+        super("bshutdown","shountdown.bshutdown");
         this.plugin = plugin;
     }
 
@@ -82,7 +82,7 @@ public class CommandShutdown extends Command {
                     ShutdownManager.setWhitelist(ch_handler.isWhitelist());
 
                     //de.dorsax.ShountDown.Spigot.Scheduler scheduler = new Scheduler(this.plugin,ldt_time, s_shutdownMessage, sd);
-                    Scheduler schedule = new Scheduler(LocalDateTime.now().plusMinutes(1L).plusSeconds(1L),s_shutdownMessage);
+                    Scheduler schedule = new Scheduler(ch_handler.getTime(),s_shutdownMessage);
                     schedule.setSilent(ch_handler.isSilent());
                     scheduledTask = ProxyServer.getInstance().getScheduler().schedule(this.plugin,schedule,1L, 1L, TimeUnit.SECONDS);
                     schedule.setScheduledTask(scheduledTask);
